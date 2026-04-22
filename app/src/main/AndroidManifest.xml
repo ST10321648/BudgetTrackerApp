@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BudgetTrackerApp">
         <activity
+            android:name=".AddExpenseActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddCategoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".HomeActivity"
             android:exported="false" />
         <activity

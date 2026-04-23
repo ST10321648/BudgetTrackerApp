@@ -6,28 +6,21 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="Add Expense"
+        android:text="Add Category"
         android:textSize="22sp"
         android:layout_marginBottom="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <EditText
-        android:id="@+id/amountInput"
-        android:hint="Enter Amount"
-        android:inputType="numberDecimal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <EditText
-        android:id="@+id/descriptionInput"
-        android:hint="Description"
+        android:id="@+id/categoryInput"
+        android:hint="Enter Category Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <Button
-        android:id="@+id/saveExpenseBtn"
-        android:text="Save Expense"
+        android:id="@+id/saveCategoryBtn"
+        android:text="Save Category"
         android:layout_marginTop="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

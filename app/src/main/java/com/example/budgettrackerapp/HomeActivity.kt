@@ -13,15 +13,21 @@ class HomeActivity : AppCompatActivity() {
 
         val addCategoryBtn = findViewById<Button>(R.id.addCategoryBtn)
         val addExpenseBtn = findViewById<Button>(R.id.addExpenseBtn)
+        val viewExpensesBtn = findViewById<Button>(R.id.viewExpensesBtn)
 
+        // Navigates to Add Category screen
         addCategoryBtn.setOnClickListener {
-            val intent = Intent(this, AddCategoryActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, AddCategoryActivity::class.java))
         }
 
+        // Navigates to Add Expense screen
         addExpenseBtn.setOnClickListener {
-            val intent = Intent(this, AddExpenseActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, AddExpenseActivity::class.java))
+        }
+
+        // Navigates to View Expenses screen
+        viewExpensesBtn.setOnClickListener {
+            startActivity(Intent(this, ViewExpensesActivity::class.java))
         }
     }
 }

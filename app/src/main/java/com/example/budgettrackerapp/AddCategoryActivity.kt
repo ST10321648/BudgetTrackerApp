@@ -12,18 +12,31 @@ class AddCategoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_category)
 
+        // Enables back navigation
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val categoryInput = findViewById<EditText>(R.id.categoryInput)
         val saveBtn = findViewById<Button>(R.id.saveCategoryBtn)
 
         saveBtn.setOnClickListener {
-            val categoryText = categoryInput.text.toString()
+            val text = categoryInput.text.toString()
 
-            if (categoryText.isEmpty()) {
+            // Check if the user entered a category
+            if (text.isEmpty()) {
                 Toast.makeText(this, "Please enter a category", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Category saved!", Toast.LENGTH_SHORT).show()
+                // Display confirmation message
+                Toast.makeText(this, "Category added successfully!", Toast.LENGTH_SHORT).show()
+
+                // Clear input field after saving
                 categoryInput.text.clear()
             }
         }
+    }
+
+    // Handles back button functionality
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
     }
 }

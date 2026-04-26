@@ -4,12 +4,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import com.example.budgettrackerapp.data.local.Database.AppDatabase
+import com.example.budgettrackerapp.data.local.entity.Category
 
 class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        // ✅ DATABASE CONNECTION
+        val db = AppDatabase.getDatabase(this)
+
+        lifecycleScope.launch {
+            db.categoryDao().insert(Category(name = "Food"))
+        }
 
         val addCategoryBtn = findViewById<Button>(R.id.addCategoryBtn)
         val addExpenseBtn = findViewById<Button>(R.id.addExpenseBtn)

@@ -1,0 +1,36 @@
+package com.example.budgettrackerapp.data.local.Database
+
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import com.example.budgettrackerapp.data.local.Dao.*
+import com.example.budgettrackerapp.data.local.entity.*
+
+@Database(
+    entities = [User::class, Category::class, Expense::class],
+    version = 1
+)
+abstract class AppDatabase : RoomDatabase() {
+
+    abstract fun userDao(): UserDao
+    abstract fun categoryDao(): CategoryDao
+    abstract fun expenseDao(): ExpenseDao
+
+    companion object {
+        @Volatile
+        private var INSTANCE: AppDatabase? = null
+
+        fun getDatabase(context: Context): AppDatabase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java,
+                    "budget_db"
+                ).build()
+                INSTANCE = instance
+                instance
+            }
+        }
+    }
+}

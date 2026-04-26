@@ -3,6 +3,7 @@ package com.example.budgettrackerapp
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
@@ -33,6 +34,26 @@ class HomeActivity : AppCompatActivity() {
         // Navigates to View Expenses screen
         viewExpensesBtn.setOnClickListener {
             startActivity(Intent(this, ViewExpensesActivity::class.java))
+        }
+
+        val setGoalBtn = findViewById<Button>(R.id.setGoalBtn)
+
+        setGoalBtn.setOnClickListener {
+            startActivity(Intent(this, GoalActivity::class.java))
+        }
+
+        val db = AppDatabase.getDatabase(this)
+
+        val minTextView = findViewById<TextView>(R.id.minTextView)
+        val maxTextView = findViewById<TextView>(R.id.maxTextView)
+
+        lifecycleScope.launch {
+            val goal = db.goalDao().getGoal()
+
+            if (goal != null) {
+                minTextView.text = "Min: ${goal.minAmount}"
+                maxTextView.text = "Max: ${goal.maxAmount}"
+            }
         }
     }
 }

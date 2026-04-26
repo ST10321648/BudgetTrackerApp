@@ -8,14 +8,16 @@ import com.example.budgettrackerapp.data.local.Dao.*
 import com.example.budgettrackerapp.data.local.entity.*
 
 @Database(
-    entities = [User::class, Category::class, Expense::class],
-    version = 1
+    entities = [User::class, Category::class, Expense::class, Goal::class],
+    version = 2
 )
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
     abstract fun categoryDao(): CategoryDao
     abstract fun expenseDao(): ExpenseDao
+
+    abstract fun goalDao(): GoalDao
 
     companion object {
         @Volatile
@@ -27,7 +29,10 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "budget_db"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
+
                 INSTANCE = instance
                 instance
             }

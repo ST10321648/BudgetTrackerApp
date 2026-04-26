@@ -6,6 +6,12 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
+// ✅ Room + Coroutines
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import com.example.budgettrackerapp.data.local.Database.AppDatabase
+import com.example.budgettrackerapp.data.local.entity.Category
+
 class AddCategoryActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,17 +24,26 @@ class AddCategoryActivity : AppCompatActivity() {
         val categoryInput = findViewById<EditText>(R.id.categoryInput)
         val saveBtn = findViewById<Button>(R.id.saveCategoryBtn)
 
-        saveBtn.setOnClickListener {
-            val text = categoryInput.text.toString()
+        // ✅ Initialize database
+        val db = AppDatabase.getDatabase(this)
 
-            // Check if the user entered a category
+        saveBtn.setOnClickListener {
+            val text = categoryInput.text.toString().trim()
+
+            // Validate input
             if (text.isEmpty()) {
                 Toast.makeText(this, "Please enter a category", Toast.LENGTH_SHORT).show()
             } else {
-                // Display confirmation message
+
+                // ✅ Save to RoomDB
+                lifecycleScope.launch {
+                    db.categoryDao().insert(Category(name = text))
+                }
+
+                // Feedback to user
                 Toast.makeText(this, "Category added successfully!", Toast.LENGTH_SHORT).show()
 
-                // Clear input field after saving
+                // Clear input
                 categoryInput.text.clear()
             }
         }

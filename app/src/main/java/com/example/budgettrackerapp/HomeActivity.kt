@@ -15,12 +15,6 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        // ✅ DATABASE CONNECTION
-        val db = AppDatabase.getDatabase(this)
-
-        lifecycleScope.launch {
-            db.categoryDao().insert(Category(name = "Food"))
-        }
 
         val addCategoryBtn = findViewById<Button>(R.id.addCategoryBtn)
         val addExpenseBtn = findViewById<Button>(R.id.addExpenseBtn)

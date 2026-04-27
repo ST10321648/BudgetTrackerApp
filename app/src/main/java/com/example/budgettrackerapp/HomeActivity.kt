@@ -44,16 +44,14 @@ class HomeActivity : AppCompatActivity() {
 
         val db = AppDatabase.getDatabase(this)
 
-        val minTextView = findViewById<TextView>(R.id.minTextView)
-        val maxTextView = findViewById<TextView>(R.id.maxTextView)
+        val viewGoalsBtn = findViewById<Button>(R.id.viewGoalsBtn)
 
-        lifecycleScope.launch {
-            val goal = db.goalDao().getGoal()
+        viewGoalsBtn.setOnClickListener {
+            startActivity(Intent(this, ViewGoalsActivity::class.java))
+        }
 
-            if (goal != null) {
-                minTextView.text = "Min: ${goal.minAmount}"
-                maxTextView.text = "Max: ${goal.maxAmount}"
-            }
+
+
+
         }
     }
-}

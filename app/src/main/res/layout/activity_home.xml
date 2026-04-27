@@ -45,16 +45,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/minTextView"
+    <Button
+        android:id="@+id/viewGoalsBtn"
+        android:text="VIEW GOALS"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Min: -" />
+        android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/maxTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Max: -" />
+
 
 </LinearLayout>

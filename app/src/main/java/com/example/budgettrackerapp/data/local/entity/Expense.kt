@@ -18,8 +18,10 @@ data class Expense(
     @PrimaryKey(autoGenerate = true)
     val expenseId: Int = 0,
     val amount: Double,
-    val date: String,
     val description: String,
     val categoryId: Int,
-    val photoUri: String?
+
+
+    val date: String = "",          // ✅ default value
+    val photoUri: String? = null
 )

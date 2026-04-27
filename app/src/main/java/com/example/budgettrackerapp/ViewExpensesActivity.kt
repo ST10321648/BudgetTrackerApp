@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.example.budgettrackerapp.data.local.Database.AppDatabase
+import kotlinx.coroutines.launch
 
 class ViewExpensesActivity : AppCompatActivity() {
 
@@ -11,23 +14,24 @@ class ViewExpensesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_expenses)
 
-        // Enables back navigation in the action bar
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val listView = findViewById<ListView>(R.id.expenseList)
+        val db = AppDatabase.getDatabase(this)
 
-        // ArrayAdapter is used to display the list of expenses in a simple list format
-        val adapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_list_item_1,
-            AddExpenseActivity.expensesList // Retrieves data stored from AddExpenseActivity
-        )
+        lifecycleScope.launch {
+            val expenses = db.expenseDao().getAll()
 
-        // Connect adapter to ListView
-        listView.adapter = adapter
+            val adapter = ArrayAdapter(
+                this@ViewExpensesActivity,
+                android.R.layout.simple_list_item_1,
+                expenses.map { "${it.description} - R${it.amount}" }
+            )
+
+            listView.adapter = adapter
+        }
     }
 
-    // Handles back button press in the action bar
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return true

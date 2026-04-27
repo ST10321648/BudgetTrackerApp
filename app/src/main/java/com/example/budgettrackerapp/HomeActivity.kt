@@ -50,8 +50,10 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this, ViewGoalsActivity::class.java))
         }
 
+        val viewTotalsBtn = findViewById<Button>(R.id.viewCategoryTotalsBtn)
 
-
-
+        viewTotalsBtn.setOnClickListener {
+            startActivity(Intent(this, ViewCategoryTotalsActivity::class.java))
+        }
         }
     }

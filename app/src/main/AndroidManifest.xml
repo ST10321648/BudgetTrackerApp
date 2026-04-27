@@ -29,6 +29,8 @@
         <activity
             android:name=".ViewGoalsActivity"
             android:exported="false" />
+        <activity android:name=".ViewCategoryTotalsActivity" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

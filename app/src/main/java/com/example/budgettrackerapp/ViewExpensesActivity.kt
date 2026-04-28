@@ -1,13 +1,8 @@
 package com.example.budgettrackerapp
-// Code Attribution
-// Title: Add Category Feature using Room Database (Android)
-// Author: Google Developers (Android Jetpack Team)
-// Date: 2024
-// Version: Android Jetpack (Room + Lifecycle + Coroutines)
-// Available at: https://developer.android.com/training/data-storage/room
-// Accessed: April 2026
+
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -24,15 +19,20 @@ class ViewExpensesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_expenses)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         listView = findViewById(R.id.expenseList)
         db = AppDatabase.getDatabase(this)
+
+        // ✅ BACK BUTTON (SAFE METHOD)
+        val backBtn = findViewById<Button>(R.id.backBtn)
+
+        backBtn.setOnClickListener {
+            finish()
+        }
 
         // 🔥 Load all expenses by default
         loadAllExpenses()
 
-        // OPTIONAL: If you pass filter dates via Intent
+        // OPTIONAL FILTER
         val startDate = intent.getLongExtra("startDate", -1)
         val endDate = intent.getLongExtra("endDate", -1)
 
@@ -47,7 +47,6 @@ class ViewExpensesActivity : AppCompatActivity() {
     private fun loadAllExpenses() {
         lifecycleScope.launch {
             val expenses = db.expenseDao().getAll()
-
             updateList(expenses.map { "${it.description} - R${it.amount}" })
         }
     }
@@ -57,8 +56,6 @@ class ViewExpensesActivity : AppCompatActivity() {
     // =========================
     private fun loadFilteredExpenses(startDate: Long, endDate: Long) {
         lifecycleScope.launch {
-
-            // Ayabonga: Get only expenses within date range
             val expenses = db.expenseDao().getExpensesByDate(startDate, endDate)
 
             if (expenses.isEmpty()) {
@@ -74,7 +71,7 @@ class ViewExpensesActivity : AppCompatActivity() {
     }
 
     // =========================
-    // 📌 REUSABLE UI UPDATE
+    // 📌 UPDATE UI
     // =========================
     private fun updateList(items: List<String>) {
         val adapter = ArrayAdapter(
@@ -83,10 +80,5 @@ class ViewExpensesActivity : AppCompatActivity() {
             items
         )
         listView.adapter = adapter
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return true
     }
 }

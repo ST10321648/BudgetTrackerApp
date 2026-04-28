@@ -8,14 +8,17 @@ import kotlinx.coroutines.launch
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.budgettrackerapp.data.local.Database.AppDatabase
 import com.example.budgettrackerapp.data.local.entity.Expense
+import com.example.budgettrackerapp.data.local.entity.Category
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AddExpenseActivity : AppCompatActivity() {
 
-    // 📸 Store selected image URI
     private var selectedImageUri: String? = null
     private lateinit var imageView: ImageView
+    private lateinit var categorySpinner: Spinner
+    private var categoriesList: List<Category> = emptyList()
 
-    // 📸 Image picker
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
             imageView.setImageURI(uri)
@@ -29,73 +32,87 @@ class AddExpenseActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        // ✅ UI Elements (MAKE SURE XML MATCHES THESE IDS)
         val amountInput = findViewById<EditText>(R.id.amountInput)
         val dateInput = findViewById<EditText>(R.id.dateInput)
         val descriptionInput = findViewById<EditText>(R.id.descriptionInput)
-
         val saveBtn = findViewById<Button>(R.id.saveExpenseBtn)
         val uploadBtn = findViewById<Button>(R.id.uploadImageBtn)
+        categorySpinner = findViewById(R.id.categorySpinner)
         imageView = findViewById(R.id.expenseImageView)
 
-        // ✅ DB
+        // Set current date as default
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        dateInput.setText(sdf.format(Date()))
+
         val db = AppDatabase.getDatabase(this)
 
-        // 📸 Open gallery
+        // Load Categories
+        lifecycleScope.launch {
+            categoriesList = db.categoryDao().getAll()
+            if (categoriesList.isEmpty()) {
+                Toast.makeText(this@AddExpenseActivity, "Please add a category first!", Toast.LENGTH_LONG).show()
+            }
+            val adapter = ArrayAdapter(
+                this@AddExpenseActivity,
+                android.R.layout.simple_spinner_item,
+                categoriesList.map { it.name }
+            )
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            categorySpinner.adapter = adapter
+        }
+
         uploadBtn.setOnClickListener {
             pickImage.launch("image/*")
         }
 
-        // 💾 Save expense
         saveBtn.setOnClickListener {
-
             val amountStr = amountInput.text.toString().trim()
-            val date = dateInput.text.toString().trim()
+            val dateStr = dateInput.text.toString().trim()
             val description = descriptionInput.text.toString().trim()
-
             val amount = amountStr.toDoubleOrNull()
 
-            // ✅ Validation
+            val selectedCategoryIndex = categorySpinner.selectedItemPosition
+            
+            val dateMillis = try {
+                sdf.parse(dateStr)?.time ?: System.currentTimeMillis()
+            } catch (e: Exception) {
+                System.currentTimeMillis()
+            }
+
             when {
-                amount == null -> {
-                    Toast.makeText(this, "Enter a valid amount", Toast.LENGTH_SHORT).show()
-                }
-                date.isEmpty() -> {
-                    Toast.makeText(this, "Please enter a date", Toast.LENGTH_SHORT).show()
-                }
-                description.isEmpty() -> {
-                    Toast.makeText(this, "Please enter a description", Toast.LENGTH_SHORT).show()
-                }
+                categoriesList.isEmpty() -> Toast.makeText(this, "Add a category first", Toast.LENGTH_SHORT).show()
+                amount == null -> Toast.makeText(this, "Enter a valid amount", Toast.LENGTH_SHORT).show()
+                description.isEmpty() -> Toast.makeText(this, "Please enter a description", Toast.LENGTH_SHORT).show()
+                selectedCategoryIndex == AdapterView.INVALID_POSITION -> Toast.makeText(this, "Select a category", Toast.LENGTH_SHORT).show()
                 else -> {
-
+                    val categoryId = categoriesList[selectedCategoryIndex].categoryId
                     lifecycleScope.launch {
-                        db.expenseDao().insert(
-                            Expense(
-                                amount = amount,
-                                date = date,
-                                description = description,
-                                categoryId = 1, // 🔥 TEMP: replace with spinner later
-                                imageUri = selectedImageUri
+                        try {
+                            db.expenseDao().insert(
+                                Expense(
+                                    amount = amount,
+                                    date = dateMillis,
+                                    description = description,
+                                    categoryId = categoryId,
+                                    imageUri = selectedImageUri
+                                )
                             )
-                        )
 
-                        Toast.makeText(this@AddExpenseActivity, "Expense saved!", Toast.LENGTH_SHORT).show()
-
-                        // 🔄 Clear UI
-                        amountInput.text.clear()
-                        dateInput.text.clear()
-                        descriptionInput.text.clear()
-                        imageView.setImageResource(android.R.drawable.ic_menu_gallery)
-                        selectedImageUri = null
-
-                        finish()
+                            runOnUiThread {
+                                Toast.makeText(this@AddExpenseActivity, "Expense saved!", Toast.LENGTH_SHORT).show()
+                                finish()
+                            }
+                        } catch (e: Exception) {
+                            runOnUiThread {
+                                Toast.makeText(this@AddExpenseActivity, "Error saving: ${e.message}", Toast.LENGTH_LONG).show()
+                            }
+                        }
                     }
                 }
             }
         }
     }
 
-    // 🔙 Back button
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return true

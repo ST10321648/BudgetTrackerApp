@@ -18,38 +18,35 @@ class AddCategoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_category)
 
-        // Enables back navigation
+        // ✅ Back button
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val categoryInput = findViewById<EditText>(R.id.categoryInput)
         val saveBtn = findViewById<Button>(R.id.saveCategoryBtn)
 
-        // ✅ Initialize database
+        // ✅ Initialize DB
         val db = AppDatabase.getDatabase(this)
 
         saveBtn.setOnClickListener {
-            val text = categoryInput.text.toString().trim()
+            val categoryName = categoryInput.text.toString().trim()
 
-            // Validate input
-            if (text.isEmpty()) {
+            if (categoryName.isEmpty()) {
                 Toast.makeText(this, "Please enter a category", Toast.LENGTH_SHORT).show()
             } else {
 
-                // ✅ Save to RoomDB
                 lifecycleScope.launch {
-                    db.categoryDao().insert(Category(name = text))
+                    db.categoryDao().insert(Category(name = categoryName))
+
+                    runOnUiThread {
+                        Toast.makeText(this@AddCategoryActivity, "Category saved!", Toast.LENGTH_SHORT).show()
+                        categoryInput.text.clear()
+                        finish()
+                    }
                 }
-
-                // Feedback to user
-                Toast.makeText(this, "Category added successfully!", Toast.LENGTH_SHORT).show()
-
-                // Clear input
-                categoryInput.text.clear()
             }
         }
     }
 
-    // Handles back button functionality
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return true

@@ -20,8 +20,7 @@ data class Expense(
     val amount: Double,
     val description: String,
     val categoryId: Int,
-
-
     val date: String = "",          // ✅ default value
-    val photoUri: String? = null
+    val photoUri: String? = null,
+    val imageUri: String?
 )

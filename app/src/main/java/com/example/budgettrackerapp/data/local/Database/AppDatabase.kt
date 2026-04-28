@@ -9,7 +9,7 @@ import com.example.budgettrackerapp.data.local.entity.*
 
 @Database(
     entities = [User::class, Category::class, Expense::class, Goal::class],
-    version = 2
+    version = 3
 )
 abstract class AppDatabase : RoomDatabase() {
 

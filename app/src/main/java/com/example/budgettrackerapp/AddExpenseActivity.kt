@@ -11,13 +11,11 @@ import com.example.budgettrackerapp.data.local.entity.Expense
 
 class AddExpenseActivity : AppCompatActivity() {
 
-    // 🔹 Store selected image URI
+    // 📸 Store selected image URI
     private var selectedImageUri: String? = null
-
-    // 🔹 ImageView reference
     private lateinit var imageView: ImageView
 
-    // 🔹 Image picker launcher (OUTSIDE onCreate)
+    // 📸 Image picker
     private val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
             imageView.setImageURI(uri)
@@ -31,17 +29,19 @@ class AddExpenseActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        // 🔹 UI elements
+        // ✅ UI Elements (MAKE SURE XML MATCHES THESE IDS)
         val amountInput = findViewById<EditText>(R.id.amountInput)
+        val dateInput = findViewById<EditText>(R.id.dateInput)
         val descriptionInput = findViewById<EditText>(R.id.descriptionInput)
+
         val saveBtn = findViewById<Button>(R.id.saveExpenseBtn)
         val uploadBtn = findViewById<Button>(R.id.uploadImageBtn)
         imageView = findViewById(R.id.expenseImageView)
 
-        // 🔹 Database instance
+        // ✅ DB
         val db = AppDatabase.getDatabase(this)
 
-        // 📸 Open gallery when button clicked
+        // 📸 Open gallery
         uploadBtn.setOnClickListener {
             pickImage.launch("image/*")
         }
@@ -49,37 +49,48 @@ class AddExpenseActivity : AppCompatActivity() {
         // 💾 Save expense
         saveBtn.setOnClickListener {
 
-            val amount = amountInput.text.toString()
-            val description = descriptionInput.text.toString()
+            val amountStr = amountInput.text.toString().trim()
+            val date = dateInput.text.toString().trim()
+            val description = descriptionInput.text.toString().trim()
 
-            if (amount.isEmpty() || amount.toDoubleOrNull() == null) {
-                Toast.makeText(this, "Enter a valid amount", Toast.LENGTH_SHORT).show()
+            val amount = amountStr.toDoubleOrNull()
 
-            } else if (description.isEmpty()) {
-                Toast.makeText(this, "Please enter a description", Toast.LENGTH_SHORT).show()
-
-            } else {
-
-                val amountValue = amount.toDouble()
-
-                lifecycleScope.launch {
-                    db.expenseDao().insert(
-                        Expense(
-                            amount = amountValue,
-                            description = description,
-                            categoryId = 1, // 🔥 TEMP (we’ll fix with spinner later)
-                            imageUri = selectedImageUri
-                        )
-                    )
+            // ✅ Validation
+            when {
+                amount == null -> {
+                    Toast.makeText(this, "Enter a valid amount", Toast.LENGTH_SHORT).show()
                 }
+                date.isEmpty() -> {
+                    Toast.makeText(this, "Please enter a date", Toast.LENGTH_SHORT).show()
+                }
+                description.isEmpty() -> {
+                    Toast.makeText(this, "Please enter a description", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
 
-                Toast.makeText(this, "Expense saved successfully!", Toast.LENGTH_SHORT).show()
+                    lifecycleScope.launch {
+                        db.expenseDao().insert(
+                            Expense(
+                                amount = amount,
+                                date = date,
+                                description = description,
+                                categoryId = 1, // 🔥 TEMP: replace with spinner later
+                                imageUri = selectedImageUri
+                            )
+                        )
 
-                // 🔄 Clear inputs
-                amountInput.text.clear()
-                descriptionInput.text.clear()
-                imageView.setImageResource(android.R.drawable.ic_menu_gallery)
-                selectedImageUri = null
+                        Toast.makeText(this@AddExpenseActivity, "Expense saved!", Toast.LENGTH_SHORT).show()
+
+                        // 🔄 Clear UI
+                        amountInput.text.clear()
+                        dateInput.text.clear()
+                        descriptionInput.text.clear()
+                        imageView.setImageResource(android.R.drawable.ic_menu_gallery)
+                        selectedImageUri = null
+
+                        finish()
+                    }
+                }
             }
         }
     }

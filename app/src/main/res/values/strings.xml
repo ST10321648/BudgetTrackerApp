@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">BudgetTrackerApp</string>
+    <string name="add_expense">Add Expense</string>
+    <string name="enter_amount">Enter Amount</string>
+    <string name="enter_date">Enter Date (YYYY-MM-DD)</string>
+    <string name="description">Description</string>
+    <string name="save_expense">Save Expense</string>
+    <string name="upload_image">Upload Image</string>
+    <string name="expense_image">Expense image preview</string>
 </resources>

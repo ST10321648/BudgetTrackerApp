@@ -1,59 +1,133 @@
-<!-- Main home screen layout containing navigation buttons -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="20dp"
-    android:background="#F5F5F5"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
 
-    <!-- App title -->
-    <TextView
-        android:text="Budget Tracker"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <!-- Button to navigate to category screen -->
-    <Button
-        android:id="@+id/addCategoryBtn"
-        android:text="Add Category"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <!-- Button to navigate to expense screen -->
-    <Button
-        android:id="@+id/addExpenseBtn"
-        android:text="Add Expense"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <!-- Button to view saved expenses -->
-    <Button
-        android:id="@+id/viewExpensesBtn"
-        android:text="View Expenses"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <Button
-        android:id="@+id/setGoalBtn"
-        android:text="SET GOALS"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <Button
-        android:id="@+id/viewGoalsBtn"
-        android:text="VIEW GOALS"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <Button
-        android:id="@+id/viewCategoryTotalsBtn"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="VIEW CATEGORY TOTALS"/>
-</LinearLayout>
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- ========================= -->
+        <!-- 📌 TITLE -->
+        <!-- ========================= -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Budget(a) Dashboard"
+            android:textColor="#4CAF50"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <!-- ========================= -->
+        <!-- 📌 BUDGET CARD -->
+        <!-- ========================= -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/tvRemainingBudget"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="R0.00"
+                    android:textColor="#4CAF50"
+                    android:textSize="36sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Remaining Balance"
+                    android:textSize="14sp" />
+
+                <ProgressBar
+                    android:id="@+id/budgetProgressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:progressTint="#4CAF50" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- ========================= -->
+        <!-- 📌 GRID BUTTONS -->
+        <!-- ========================= -->
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:columnCount="2">
+
+            <Button
+                android:id="@+id/addCategoryBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="Add Category"
+                android:backgroundTint="#4CAF50" />
+
+            <Button
+                android:id="@+id/addExpenseBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="Add Expense"
+                android:backgroundTint="#4CAF50" />
+
+            <Button
+                android:id="@+id/viewExpensesBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="View List"
+                android:backgroundTint="#4CAF50" />
+
+            <Button
+                android:id="@+id/setGoalBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="Set Goals"
+                android:backgroundTint="#4CAF50" />
+
+            <!-- ✅ ADDED BUTTONS (MERGED CORRECTLY) -->
+            <Button
+                android:id="@+id/viewGoalsBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="View Goals"
+                android:backgroundTint="#4CAF50" />
+
+            <Button
+                android:id="@+id/viewCategoryTotalsBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="4dp"
+                android:text="Category Totals"
+                android:backgroundTint="#4CAF50" />
+
+        </GridLayout>
+
+    </LinearLayout>
+</ScrollView>

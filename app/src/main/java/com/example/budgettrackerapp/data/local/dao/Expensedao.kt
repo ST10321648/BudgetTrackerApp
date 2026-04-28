@@ -7,27 +7,25 @@ import com.example.budgettrackerapp.data.local.entity.Expense
 @Dao
 interface ExpenseDao {
 
-    // ➕ Insert expense
     @Insert
     suspend fun insert(expense: Expense)
 
-    // 📋 Get all expenses
     @Query("SELECT * FROM expenses")
     suspend fun getAll(): List<Expense>
 
-    // ✏️ Update expense
+    // Ayabonga: This fix calculates the total for your HomeActivity progress bar
+    @Query("SELECT SUM(amount) FROM expenses")
+    suspend fun getTotalSpending(): Double?
+
     @Update
     suspend fun update(expense: Expense)
 
-    // ❌ Delete expense
     @Delete
     suspend fun delete(expense: Expense)
 
-    // 📅 Filter by date range
     @Query("SELECT * FROM expenses WHERE date BETWEEN :start AND :end")
     suspend fun getExpensesByDate(start: Long, end: Long): List<Expense>
 
-    // 📊 Category totals (analytics)
     @Query("""
         SELECT c.name AS categoryName, SUM(e.amount) AS total
         FROM expenses e

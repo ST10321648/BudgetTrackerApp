@@ -1,14 +1,16 @@
 package com.example.budgettrackerapp
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
 import com.example.budgettrackerapp.data.local.Database.AppDatabase
-import com.example.budgettrackerapp.data.local.entity.Category
+import kotlinx.coroutines.launch
 
 class HomeActivity : AppCompatActivity() {
 
@@ -16,44 +18,73 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-
+        // =========================
+        // 📌 NAVIGATION BUTTONS
+        // =========================
         val addCategoryBtn = findViewById<Button>(R.id.addCategoryBtn)
         val addExpenseBtn = findViewById<Button>(R.id.addExpenseBtn)
         val viewExpensesBtn = findViewById<Button>(R.id.viewExpensesBtn)
+        val setGoalBtn = findViewById<Button>(R.id.setGoalBtn)
+        val viewGoalsBtn = findViewById<Button>(R.id.viewGoalsBtn)
+        val viewTotalsBtn = findViewById<Button>(R.id.viewCategoryTotalsBtn)
 
-        // Navigates to Add Category screen
         addCategoryBtn.setOnClickListener {
             startActivity(Intent(this, AddCategoryActivity::class.java))
         }
 
-        // Navigates to Add Expense screen
         addExpenseBtn.setOnClickListener {
             startActivity(Intent(this, AddExpenseActivity::class.java))
         }
 
-        // Navigates to View Expenses screen
         viewExpensesBtn.setOnClickListener {
             startActivity(Intent(this, ViewExpensesActivity::class.java))
         }
-
-        val setGoalBtn = findViewById<Button>(R.id.setGoalBtn)
 
         setGoalBtn.setOnClickListener {
             startActivity(Intent(this, GoalActivity::class.java))
         }
 
-        val db = AppDatabase.getDatabase(this)
-
-        val viewGoalsBtn = findViewById<Button>(R.id.viewGoalsBtn)
-
         viewGoalsBtn.setOnClickListener {
             startActivity(Intent(this, ViewGoalsActivity::class.java))
         }
 
-        val viewTotalsBtn = findViewById<Button>(R.id.viewCategoryTotalsBtn)
-
         viewTotalsBtn.setOnClickListener {
             startActivity(Intent(this, ViewCategoryTotalsActivity::class.java))
         }
+
+        // =========================
+        // 📌 BUDGET OVERVIEW UI
+        // =========================
+        val tvRemaining = findViewById<TextView>(R.id.tvRemainingBudget)
+        val progressBar = findViewById<ProgressBar>(R.id.budgetProgressBar)
+
+        val db = AppDatabase.getDatabase(this)
+
+        lifecycleScope.launch {
+
+            // 1. Monthly Budget Goal
+            val totalGoal = db.goalDao().getMonthlyGoal() ?: 5000.0
+
+            // 2. Total Spending
+            val totalSpent = db.expenseDao().getTotalSpending() ?: 0.0
+
+            val remaining = totalGoal - totalSpent
+
+            // 3. Update UI safely
+            tvRemaining.text = "R${String.format("%.2f", remaining)}"
+
+            progressBar.max = totalGoal.toInt()
+            progressBar.progress = totalSpent.toInt()
+
+            // 4. Budget warning system
+            if (totalSpent > totalGoal) {
+                tvRemaining.setTextColor(Color.RED)
+                Toast.makeText(
+                    this@HomeActivity,
+                    "Warning: Monthly Budget Exceeded!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
     }
+}

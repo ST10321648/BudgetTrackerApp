@@ -1,4 +1,11 @@
 package com.example.budgettrackerapp
+// Code Attribution
+// Title: Add Category Feature using Room Database (Android)
+// Author: Google Developers (Android Jetpack Team)
+// Date: 2024
+// Version: Android Jetpack (Room + Lifecycle + Coroutines)
+// Available at: https://developer.android.com/training/data-storage/room
+// Accessed: April 2026
 
 import android.content.Intent
 import android.graphics.Color

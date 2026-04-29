@@ -26,6 +26,9 @@ The application focuses on clean UI design, ease of use, and reliable local data
 - Connect an Android device or start an emulator
 - Click Run to launch the application
 
+## YouTube Video Link
+https://youtube.com/shorts/Fowcf7829Ls?si=IjvGphTJnIc2TQu5 
+
 ## Application Overview
 - Users can add new transactions with details
 - Transactions are displayed in a scrollable list

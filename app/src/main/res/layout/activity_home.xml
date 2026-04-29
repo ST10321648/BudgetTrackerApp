@@ -15,8 +15,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Budget Dashboard"
-            android:textSize="26sp"
+            android:text="Budgeta"
+            android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="#222"/>
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BudgetTrackerApp</string>
+    <string name="app_name">Budgeta</string>
     <string name="add_expense">Add Expense</string>
     <string name="enter_amount">Enter Amount</string>
     <string name="enter_date">Enter Date (YYYY-MM-DD)</string>

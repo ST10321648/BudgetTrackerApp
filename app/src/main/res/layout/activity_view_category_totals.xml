@@ -14,20 +14,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Spending Insights"
-            android:textSize="24sp"
+            android:text="Budgeta Insights"
+            android:textSize="26sp"
             android:textStyle="bold"
             android:textColor="#222"/>
-
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Breakdown of your expenses by category"
+            android:text="Track and understand your spending"
             android:textSize="14sp"
             android:textColor="#777"
             android:layout_marginBottom="16dp"/>
 
+        <!-- BACK BUTTON -->
         <Button
             android:id="@+id/backBtn"
             android:layout_width="wrap_content"
@@ -54,7 +54,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Overview"
+                    android:text="Category Overview"
                     android:textSize="14sp"
                     android:textColor="#777"/>
 
@@ -72,7 +72,7 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- INSIGHT CARD (placeholder for future logic) -->
+        <!-- INSIGHT CARD -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,11 +88,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Insight"
+                    android:text="Smart Insight"
                     android:textSize="14sp"
                     android:textColor="#777"/>
 
                 <TextView
+                    android:id="@+id/insightTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Your highest spending category will appear here"
